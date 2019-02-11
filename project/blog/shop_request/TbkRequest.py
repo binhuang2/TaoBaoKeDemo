@@ -2,9 +2,6 @@ import http.client as httplib
 import urllib.parse
 import time
 import hashlib
-import json
-import itertools
-import mimetypes
 
 class BaseRequest:
     http_url = 'http://gw.api.taobao.com/router/rest'
