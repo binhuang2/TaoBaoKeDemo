@@ -1,4 +1,3 @@
 .idea
 .xml
-/project/blog/__pycache__
-/project/project/__pycache__
+__pycache__/
