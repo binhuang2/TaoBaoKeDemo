@@ -1,3 +1,8 @@
 *.xml
 /.idea/
 __pycache__/
+*.iml
+*.xml
+project/.idea/vcs.xml
+*.xml
+project/.idea/vcs.xml
