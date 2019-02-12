@@ -3,25 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>便宜买</title>
+    <title>demo</title>
+    <link href="/static/css/base.css" rel="stylesheet">
     <style type="text/css">
-        *{margin:0;padding:0;}
-        body { font: 15px "Microsoft YaHei", Arial, Helvetica, sans-serif; background: #FFF;}
-        img { border: 0; display: block }
-        ul, li { list-style: none; }
-        a { text-decoration: none; color: #333; }
-        a:hover { color: #000; text-decoration: none; }
-        input {
-            border:none;
-            outline:none;
-            background:none;
-        }
         .content {
             width: 700px;
             margin: auto;
             margin-top: 10%;
         }
-
         .content .logo {
             height: 100px;
         }
@@ -37,7 +26,6 @@
         .content .search .search_right {
             width: 120px;
             height: 46px;
-            background-color: #fb4806;
             float: left;
         }
         .content .search .search_left input {
@@ -46,43 +34,39 @@
             padding: 0 5px 0 5px;
             font-size: 15px;
         }
-        .content .search .search_right input {
+        .content .search .search_right button {
             width: 100%;
             height: 46px;
             color: white;
             font-size: 15px;
+            background-color: #fb4806;
         }
     </style>
 </head>
 <body>
-{% csrf_token %}
     <div class="content">
         <div class="logo">
         </div>
         <div class="search">
-            <form action="" method="get" onsubmit="return search_submit_check()">
-                    <div class="search_left">
-                        {% if data %}
-                            <input type="text" name="product_name" placeholder="请输入商品名称" value="{{ data.product_name }}" />
-                        {% else %}
-                            <input type="text" name="product_name" placeholder="请输入商品名称" />
-                        {% endif %}
-                    </div>
-                    <div class="search_right">
-                        <input type="submit" value="商品搜索" />
-                    </div>
+            <form action="search.html" method="get" id="HSearch" onsubmit="return search_check()">
+                <div class="search_left">
+                    <input type="text" name="q" placeholder="面包" />
+                </div>
+                <div class="search_right">
+                    <button type="submit">商品搜索</button>
+                </div>
             </form>
         </div>
     </div>
-    <script type="text/javascript">
-        function search_submit_check() {
-            var name = document.getElementsByName("product_name")[0].value;
-            if (name.length === 0) {
-                alert('请输入商品名称')
-                return false;
-            }
-            return true;
+<script type="text/javascript">
+    function search_check() {
+        var formObject = document.getElementById('HSearch');
+        var inputQ = formObject['q'];
+        if (inputQ.value.length === 0) {
+            inputQ.value = inputQ.placeholder;
         }
-    </script>
+        return true;
+    }
+</script>
 </body>
 </html>

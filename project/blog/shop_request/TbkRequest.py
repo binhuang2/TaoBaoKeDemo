@@ -25,9 +25,10 @@ class BaseRequest:
         self.param['sign'] = self.__sign()
 
     def getResponse(self):
-        '''发送淘宝客请求'''
+        '''发送请求'''
         header = self.__get_request_header()
         body = urllib.parse.urlencode(self.param)
+        print("%s?%s" % (self.http_url,body))
         connection = httplib.HTTPConnection('gw.api.taobao.com')
         connection.request(method='POST', url=self.http_url, headers=header, body=body)
         response = connection.getresponse()
@@ -43,7 +44,7 @@ class BaseRequest:
         }
 
     def __sign(self):
-        '''针对淘宝客的参数签名'''
+        '''针对api参数签名'''
         parameters = self.param
         if hasattr(parameters, "items"):
             keys = sorted(parameters.keys())
@@ -53,13 +54,15 @@ class BaseRequest:
         sign = hashlib.md5(parameters.encode("utf8")).hexdigest().upper()
         return sign
 
-class TbkItemGetRequest(BaseRequest):
-
-    response_key = 'tbk_item_get_response'
+class TbkDgMaterialOptionalRequest(BaseRequest):
+    '''
+        商品搜索
+    '''
+    response_key = 'tbk_dg_material_optional_response'
 
     def getResponse(self):
         res = super().getResponse()
         if self.response_key in res:
-            return res['tbk_item_get_response']
+            return res[self.response_key]
         else:
             return False

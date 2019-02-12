@@ -18,6 +18,7 @@ from django.urls import path
 from blog import views
 
 urlpatterns = [
-    path('index.php/admin', admin.site.urls),
-    path('index.php/index', views.index),
+    path('', views.index),
+    path('search.html', views.search),
+    path('admin.html', admin.site.urls),
 ]
