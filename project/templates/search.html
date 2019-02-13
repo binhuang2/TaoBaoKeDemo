@@ -8,15 +8,18 @@
     <link href="/static/css/base.css" rel="stylesheet">
     <style type="text/css">
         .search-bar {
-            width: 964px;
-            margin: auto;
-        }
-        .search-bar .logo {
-            height: 100px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 84px;
+            background-color: #FFF;
         }
         .search-bar .search {
+            width: 960px;
+            margin: 20px auto;
+            {#margin-top: 20px;#}
             border: 2px solid #fb4806;
-            height: 46px;
+            height: 44px;
         }
         .search-bar .search .search_left {
             width: 840px;
@@ -30,21 +33,22 @@
         }
         .search-bar .search .search_left input {
             width: 98%;
-            height: 46px;
+            height: 44px;
             padding: 0 5px 0 5px;
             font-size: 15px;
         }
         .search-bar .search .search_right button {
             width: 100%;
             height: 46px;
-            color: white;
+            color: #FFF;
             font-size: 15px;
             background-color: #fb4806;
         }
 
         .search-content {
             width: 964px;
-            margin: auto;
+            margin: 84px auto;
+            background-color: #FFF;
         }
         .search-content .baby-father {
             width: 985px;
@@ -127,7 +131,11 @@
     <div class="search">
         <form action="search.html" method="get" id="HSearch" onsubmit="return search_check()">
             <div class="search_left">
-                <input type="text" name="q" placeholder="面包" />
+                {% if data %}
+                    <input type="text" name="q" value="{{ data.q }}" />
+                {% else %}
+                    <input type="text" name="q" placeholder="丝袜" />
+                {% endif %}
             </div>
             <div class="search_right">
                 <button type="submit">商品搜索</button>
@@ -141,7 +149,7 @@
         {% for baby in data.res %}
             <div class="baby-item">
             <div class="item-img">
-                <img src="{{ baby.pict_url }}">
+                <img src="{{ baby.pict_url }}" />
             </div>
             <div class="item-info item-money">
                 <span class="nprice">现价<span class="font-20-bold">￥{{ baby.zk_final_price }}</span></span>
