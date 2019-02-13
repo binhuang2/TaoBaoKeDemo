@@ -13,7 +13,9 @@ def search(request):
         'method':'taobao.tbk.dg.material.optional',
         'q':product_name,
         'adzone_id':'91132500175',
-        'platform':2
+        'platform':2,
+        'page_no':1,
+        'page_size':100
     }
     req = TbkRequest.TbkDgMaterialOptionalRequest(param)
     res = req.getResponse()
@@ -27,7 +29,10 @@ def search(request):
         for values in map_data:
             if len(values['coupon_id']) > 0:
                 values['coupon_share_url'] = values['coupon_share_url'].replace('\\','')
-                values['coupon_info'] = values['coupon_info'].split('减')[1]
+                coupon_info = values['coupon_info'].split('减')[1]
+                values['coupon_info'] = coupon_info
+                current_price = '%.2f' % (float(values['zk_final_price']) - float(coupon_info.split('元')[0]))
+                values['current_price'] = current_price
                 coupon.append(values)
             else:
                 not_coupon.append(values)

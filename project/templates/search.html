@@ -82,10 +82,8 @@
             margin: 5px 5px 0 5px;
         }
         .baby-item .item-money .nprice {
-            display: block;
             color: #fb4806;
             height: 100%;
-            width: 50%;
             font-size: 14px;
             float: left;
         }
@@ -93,11 +91,9 @@
             height: 100%;
             color: #4e4e4e;
             text-decoration: line-through;
-            display: block;
-            width: 50%;
             font-size: 14px;
             text-align: right;
-            float: left;
+            float: right;
         }
         .baby-item .item-coupon {
             height: 30px;
@@ -152,24 +148,26 @@
                 <img src="{{ baby.pict_url }}" />
             </div>
             <div class="item-info item-money">
-                <span class="nprice">现价<span class="font-20-bold">￥{{ baby.zk_final_price }}</span></span>
-                <span class="oprice">原价￥{{ baby.reserve_price }}</span>
+                {% if baby.current_price %}
+                    <span class="nprice">现价<span class="font-20-bold">￥{{ baby.current_price }}</span></span>
+                    <span class="oprice">原价￥{{ baby.zk_final_price }}</span>
+                {% else %}
+                    <span class="nprice">现价<span class="font-20-bold">￥{{ baby.zk_final_price }}</span></span>
+                {% endif %}
             </div>
-            {% if baby.coupon_id %}
-                <div class="item-info item-coupon">
+            <div class="item-info item-coupon">
+                {% if baby.coupon_id %}
                     <a href="{{ baby.coupon_share_url }}" target="_blank">
                         <span>领取{{ baby.coupon_info }}优惠券</span>
                     </a>
-                </div>
-            {% endif %}
+                {% endif %}
+             </div>
             <div class="item-info item-pname">
                 {% if baby.coupon_id %}
-                    <a href="{{ baby.coupon_share_url }}" target="_blank">
+                    <a href="{{ baby.coupon_share_url }}" target="_blank">{{ baby.title }}</a>
                 {% else %}
-                    <a href="{{ baby.url }}" target="_blank">
+                    <a href="{{ baby.url }}" target="_blank">{{ baby.title }}</a>
                 {% endif %}
-                    {{ baby.title }}
-                </a>
             </div>
         </div>
         {% endfor %}
