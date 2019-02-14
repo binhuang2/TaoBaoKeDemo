@@ -3,67 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>demo</title>
+    <title>免费领淘宝购物券</title>
     <link href="/static/css/base.css" rel="stylesheet">
-    <style type="text/css">
-        .search-bar {
-            width: 700px;
-            margin: auto;
-            margin-top: 10%;
-        }
-        .search-bar .logo {
-            height: 100px;
-        }
-        .search-bar .search {
-            border: 2px solid #fb4806;
-            height: 46px;
-        }
-        .search-bar .search .search_left {
-            width: 576px;
-            height: 46px;
-            float: left;
-        }
-        .search-bar .search .search_right {
-            width: 120px;
-            height: 46px;
-            float: left;
-        }
-        .search-bar .search .search_left input {
-            width: 98%;
-            height: 46px;
-            padding: 0 5px 0 5px;
-            font-size: 15px;
-        }
-        .search-bar .search .search_right button {
-            width: 100%;
-            height: 46px;
-            color: white;
-            font-size: 15px;
-            background-color: #fb4806;
-        }
-    </style>
 </head>
 <body>
-    <div class="search-bar">
-        <div class="logo">
-        </div>
-        <div class="search">
-            <form action="search.html" method="get" id="HSearch" onsubmit="return search_check()">
-                <div class="search_left">
-                    <input type="text" name="q" placeholder="面包" />
-                </div>
-                <div class="search_right">
-                    <button type="submit">商品搜索</button>
-                </div>
-            </form>
-        </div>
+<div class="search-bar">
+    <div class="search">
+        <form action="search.html" method="get" id="HSearch" onsubmit="return search_check()">
+            <div class="search_left">
+                <input type="text" name="q" placeholder="请输入商品名称" />
+            </div>
+            <div class="search_right">
+                <button type="submit">商品搜索</button>
+            </div>
+        </form>
     </div>
+</div>
+
+{% if data.res %}
+    <div class="search-content">
+    <div class="baby-father">
+        {% for baby in data.res %}
+            <div class="baby-item">
+            <div class="item-img">
+                {% if baby.coupon_click_url %}
+                    <a href="{{ baby.coupon_share_url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
+                {% else %}
+                    <a href="{{ baby.url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
+                {% endif %}
+            </div>
+            <div class="item-info item-money">
+                {% if baby.current_price %}
+                    <span class="nprice">现价<span class="font-20-bold">￥{{ baby.current_price }}</span></span>
+                    <span class="oprice">原价￥{{ baby.zk_final_price }}</span>
+                {% else %}
+                    <span class="nprice">现价<span class="font-20-bold">￥{{ baby.zk_final_price }}</span></span>
+                {% endif %}
+            </div>
+            <div class="item-info item-coupon">
+                {% if baby.coupon_click_url %}
+                    <a href="{{ baby.coupon_share_url }}" target="_blank">
+                        <span>领取{{ baby.coupon_info }}优惠券</span>
+                    </a>
+                {% endif %}
+             </div>
+            <div class="item-info item-pname">
+                {% if baby.coupon_click_url %}
+                    <a href="{{ baby.coupon_share_url }}" target="_blank">{{ baby.title }}</a>
+                {% else %}
+                    <a href="{{ baby.url }}" target="_blank">{{ baby.title }}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+<!--分页-->
+<div class="page-content">
+    <ul>
+    {% if data.page.p > 1 %}
+        <a href="?page={{ data.page.previous }}"><li>上一页</li></a>
+    {% endif %}
+    {% for index in data.page.list %}
+        {% if index == data.page.p %}
+            <li class="high">{{ index }}</li>
+        {% else %}
+            <a href="?page={{ index }}"><li>{{ index }}</li></a>
+        {% endif %}
+    {% endfor %}
+    {% if data.page.p < data.page.count %}
+        <a href="?page={{ data.page.next }}"><li>下一页</li></a>
+    {% endif %}
+    </ul>
+</div>
+
 <script type="text/javascript">
     function search_check() {
         var formObject = document.getElementById('HSearch');
         var inputQ = formObject['q'];
         if (inputQ.value.length === 0) {
-            inputQ.value = inputQ.placeholder;
+            alert('请输入商品名称');
+            return false;
         }
         return true;
     }

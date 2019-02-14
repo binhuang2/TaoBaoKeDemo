@@ -14,6 +14,7 @@ class BaseRequest:
         准备好请求参数
         :param param: 业务参数
         '''
+        self.param.clear()
         self.param['app_key'] = self.app_key
         self.param['format'] = 'json'
         self.param['v'] = '2.0'
@@ -54,9 +55,22 @@ class BaseRequest:
         sign = hashlib.md5(parameters.encode("utf8")).hexdigest().upper()
         return sign
 
+class TbkDgOptimusMaterialRequest(BaseRequest):
+    '''
+    淘宝客物料下行 - 导购
+    '''
+    response_key = 'tbk_dg_optimus_material_response'
+
+    def getResponse(self):
+        res = super().getResponse()
+        if self.response_key in res:
+            return res[self.response_key]
+        else:
+            return False
+
 class TbkDgMaterialOptionalRequest(BaseRequest):
     '''
-        商品搜索
+    淘宝客物料搜索 - 导购
     '''
     response_key = 'tbk_dg_material_optional_response'
 
@@ -66,3 +80,4 @@ class TbkDgMaterialOptionalRequest(BaseRequest):
             return res[self.response_key]
         else:
             return False
+
