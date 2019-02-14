@@ -19,6 +19,10 @@ from blog import views
 
 urlpatterns = [
     path('', views.index),
+    path('index.html', views.index),
     path('search.html', views.search),
     path('admin.html', admin.site.urls),
 ]
+
+handler404 = views.page_not_found
+handler500 = views.page_inter_error

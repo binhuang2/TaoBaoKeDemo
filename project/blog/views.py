@@ -34,6 +34,7 @@ def index(request):
     coupon = []
     not_coupon = []
     for values in map_data:
+        values['pict_url'] = values['pict_url'].replace('\\', '')
         if len(values['coupon_click_url']) > 0:
             values['coupon_share_url'] = values['coupon_click_url'].replace('\\', '')
             current_price = values['coupon_amount']
@@ -116,6 +117,7 @@ def search(request):
     coupon = []
     not_coupon = []
     for values in map_data:
+        values['pict_url'] = values['pict_url'].replace('\\', '')
         if len(values['coupon_id']) > 0:
             values['coupon_share_url'] = values['coupon_share_url'].replace('\\','')
             coupon_info = values['coupon_info'].split('减')[1]
@@ -130,3 +132,9 @@ def search(request):
     res.extend(not_coupon)
     data['res'] = res
     return render(request, 'search.html', {'data' : data})
+
+def page_not_found(request):
+    return render(request, '404.html')
+
+def page_inter_error(request):
+    return render(request, '500.html')

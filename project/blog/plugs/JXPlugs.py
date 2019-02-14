@@ -1,5 +1,3 @@
-
-
 class page:
     #总页码
     __count = 0
