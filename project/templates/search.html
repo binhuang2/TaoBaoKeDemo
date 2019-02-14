@@ -12,7 +12,8 @@
             top: 0;
             width: 100%;
             height: 84px;
-            background-color: #FFF;
+            background-color: #fff;
+            border-bottom: 1px #ECECEC solid;
         }
         .search-bar .search {
             width: 960px;
@@ -47,8 +48,8 @@
 
         .search-content {
             width: 964px;
-            margin: 84px auto;
-            background-color: #FFF;
+            margin: 134px auto 0 auto;
+            background-color: #fff;
         }
         .search-content .baby-father {
             width: 985px;
@@ -101,6 +102,7 @@
             width: 214px;
             margin: 0 5px 0 5px;
             font-size: 14px;
+            font-weight: bolder;
             text-decoration: underline;
         }
         .baby-item .item-coupon a {
@@ -119,6 +121,19 @@
             color: #fb4806;
             text-decoration: underline;
         }
+        .page-content {
+            width: 964px;
+            height: 44px;
+            margin: 50px auto 50px auto;
+            background-color: yellow;
+        }
+        .page-content ul li {
+            float: left;
+            padding: 5px;
+            margin: 5px;
+            background-color: #fb4806;
+        }
+
     </style>
 </head>
 <body>
@@ -139,13 +154,17 @@
         </form>
     </div>
 </div>
-
-<div class="search-content">
+{% if data.res %}
+    <div class="search-content">
     <div class="baby-father">
         {% for baby in data.res %}
             <div class="baby-item">
             <div class="item-img">
-                <img src="{{ baby.pict_url }}" />
+                {% if baby.coupon_id %}
+                    <a href="{{ baby.coupon_share_url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
+                {% else %}
+                    <a href="{{ baby.url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
+                {% endif %}
             </div>
             <div class="item-info item-money">
                 {% if baby.current_price %}
@@ -173,6 +192,34 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
+
+<!--分页-->
+<div class="page-content">
+    <ul>
+    {% if data.page.p > 1 %}
+        <a href="search.html?q={{ data.q }}&page={{ data.page.previous }}"><li>上一页</li></a>
+    {% endif %}
+
+    {% for index in data.page.list %}
+        {% if index == data.page.p %}
+            <a href="search.html?q={{ data.q }}&page={{ index }}"><li>当前页</li></a>
+        {% else %}
+            <a href="search.html?q={{ data.q }}&page={{ index }}"><li>{{ index }}</li></a>
+        {% endif %}
+    {% endfor %}
+
+    {% if data.page.p < data.page.count %}
+        <a href="search.html?q={{ data.q }}&page={{ data.page.next }}"><li>下一页</li></a>
+    {% endif %}
+    </ul>
+</div>
+
+<div>
+    {{ data.page }}
+</div>
+
+
 <script type="text/javascript">
     function search_check() {
         var formObject = document.getElementById('HSearch');
@@ -182,6 +229,7 @@
         }
         return true;
     }
+
 </script>
 </body>
 </html>
