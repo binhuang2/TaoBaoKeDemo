@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.shortcuts import HttpResponse
 from blog.shop_request import TbkRequest
 from blog.plugs import JXPlugs
 import math
+
 # Create your views here.
 
 #定义一些常量
@@ -49,7 +51,7 @@ def index(request):
     data = {
         'res':res
     }
-    page_count = math.ceil(500 / PAGE_SIZE)
+    page_count = math.ceil(100 / PAGE_SIZE)
     page_object = JXPlugs.page(page_count)
     page_list = page_object.comput(int(page_no))
     data['page'] = {

@@ -1,4 +1,4 @@
-"""project URL Configuration
+"""mobileProject URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -15,14 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from blog import views
+from m import views
 
 urlpatterns = [
+    #path('admin/', admin.site.urls),
     path('', views.index),
-    path('index.html', views.index),
-    path('search.html', views.search),
-    # path('admin.html', admin.site.urls),
+    path('index.html', views.index)
 ]
-
-handler404 = views.page_not_found
-handler500 = views.page_inter_error

@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>领取淘宝优惠券</title>
-    <link href="/static/css/base.css" rel="stylesheet">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>{{ data.q }}_商品搜索_免费领淘宝购物券</title>
+    <link href="http://web.appclient.cn/static/css/base.css" rel="stylesheet">
 </head>
 <body>
+
 <div class="search-bar">
     <div class="search">
         <form action="search.html" method="get" id="HSearch" onsubmit="return search_check()">
             <div class="search_left">
-                <input type="text" name="q" placeholder="请输入商品名称" />
+                {% if data %}
+                    <input type="text" name="q" value="{{ data.q }}" />
+                {% else %}
+                    <input type="text" name="q" placeholder="丝袜" />
+                {% endif %}
             </div>
             <div class="search_right">
                 <button type="submit">商品搜索</button>
@@ -25,7 +31,7 @@
         {% for baby in data.res %}
             <div class="baby-item">
             <div class="item-img">
-                {% if baby.coupon_click_url %}
+                {% if baby.coupon_id %}
                     <a href="{{ baby.coupon_share_url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
                 {% else %}
                     <a href="{{ baby.url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
@@ -40,14 +46,14 @@
                 {% endif %}
             </div>
             <div class="item-info item-coupon">
-                {% if baby.coupon_click_url %}
+                {% if baby.coupon_id %}
                     <a href="{{ baby.coupon_share_url }}" target="_blank">
                         <span>领取{{ baby.coupon_info }}优惠券</span>
                     </a>
                 {% endif %}
              </div>
             <div class="item-info item-pname">
-                {% if baby.coupon_click_url %}
+                {% if baby.coupon_id %}
                     <a href="{{ baby.coupon_share_url }}" target="_blank">{{ baby.title }}</a>
                 {% else %}
                     <a href="{{ baby.url }}" target="_blank">{{ baby.title }}</a>
@@ -62,17 +68,17 @@
 <div class="page-content">
     <ul>
     {% if data.page.p > 1 %}
-        <a href="?page={{ data.page.previous }}"><li>上一页</li></a>
+        <a href="?q={{ data.q }}&page={{ data.page.previous }}"><li>上一页</li></a>
     {% endif %}
     {% for index in data.page.list %}
         {% if index == data.page.p %}
             <li class="high">{{ index }}</li>
         {% else %}
-            <a href="?page={{ index }}"><li>{{ index }}</li></a>
+            <a href="?q={{ data.q }}&page={{ index }}"><li>{{ index }}</li></a>
         {% endif %}
     {% endfor %}
     {% if data.page.p < data.page.count %}
-        <a href="?page={{ data.page.next }}"><li>下一页</li></a>
+        <a href="?q={{ data.q }}&page={{ data.page.next }}"><li>下一页</li></a>
     {% endif %}
     </ul>
 </div>
@@ -81,8 +87,7 @@
         var formObject = document.getElementById('HSearch');
         var inputQ = formObject['q'];
         if (inputQ.value.length === 0) {
-            alert('请输入商品名称');
-            return false;
+            inputQ.value = inputQ.placeholder;
         }
         return true;
     }
