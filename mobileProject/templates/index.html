@@ -1,57 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
+    <title>领取淘宝优惠券</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>免费领淘宝购物券</title>
-    <style type="text/css">
-        *{padding: 0;margin: 0}
-        body{font:16px "Microsoft YaHei",Arial,Helvetica,sans-serif;color:#000;background:#FFF;line-height:1.5}
-        .search-content {
-            height: 60px;
-            margin: auto;
-            position:fixed;top:0;width:100%;
-            border-bottom:1px #ECECEC solid;
-            -moz-box-shadow:0 0 2px #e1e1e1;
-            -webkit-box-shadow:0 0 2px #e1e1e1;
-            box-shadow:0 0 2px #e1e1e1;
-        }
-        .search-content .search {
-            width: 98%;
-            height: 40px;
-            background-color: #FFF;
-            margin: 10px auto 10px auto;
-            border: 1px solid #fb4206;
-        }
-        .search-content input {
-            width: 70%;
-            height: 100%;
-            display: block;
-            float:left;
-            outline: none;
-            border: none;
-            margin-left: 1%;
-            font-size: 15px;
-        }
-        .search-content button {
-            display: block;
-            width: 29%;
-            height: 100%;
-            background-color: #fb4206;
-            border: none;
-            outline: none;
-            float:left;
-            color: #FFF;
-            font-size: 15px;
-        }
-    </style>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link href="/static/css/index.css" rel="stylesheet">
 </head>
 <body>
-    <div class="search-content">
-        <div class="search">
-            <input type="text" placeholder="请输入宝贝信息" />
-            <button type="submit">寻找宝贝</button>
+    <div class="search">
+        <div class="search-bar">
+            <form method="get" action="">
+                <input type="text" placeholder="请输入商品名称"/>
+                <button type="submit">商品搜索</button>
+            </form>
         </div>
     </div>
+
+    <div class="content">
+        {% for baby in data.res %}
+            <div class="pro">
+            {% if baby.coupon_click_url %}
+                <a href="{{ baby.coupon_share_url }}" target="_blank">
+            {% else %}
+                <a href="{{ baby.url }}" target="_blank">
+            {% endif %}
+                <div class="pro-img" style="background-image: url({{ baby.pict_url }})">
+                </div>
+                <div class="pro-name">
+                    {{ baby.title }}
+                </div>
+                <div class="pro-price">
+                    <div class="pro-coupon-price">{{ baby.coupon_info }}券</div>
+                    <div class="pro-old-price">¥{{ baby.zk_final_price }}</div>
+                </div>
+            </a>
+            {% if baby.coupon_click_url %}
+                <a href="{{ baby.coupon_share_url }}" target="_blank">
+                <div class="pro-coupon">
+                    <div class="coupon-info">
+                        <span class="coupon-info1">预计领取优惠券后</span>
+                        <span class="coupon-info2">¥{{ baby.current_price }}</span>
+                    </div>
+                    <div class="coupon-next"></div>
+                </div>
+                </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <script type="text/javascript">
+        var isEnd = false;
+        var isLoading = false;
+        var page = 1;
+        var getList = function () {
+            if (isEnd || isLoading) {
+                return;
+            }
+            page += 1;
+            $.ajax({
+                type:'get',
+                url:'http://127.0.0.1:8000/page.php?page='+ page,
+                dataType:'json',
+                success:function (ret) {
+                    console.log(ret.data);
+                }
+            })
+        }
+
+        getList();
+
+
+        function setRem(){
+            var width = document.body.offsetWidth;
+            var nowFont=width / 375. * 16.;
+            var htmlFont=document.getElementsByTagName('html')[0];
+            htmlFont.style.fontSize =nowFont+"px";
+            console.log(nowFont);
+        }
+        setRem();
+        window.onresize=setRem;  //监听屏幕变化
+    </script>
 </body>
 </html>

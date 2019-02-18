@@ -1,0 +1,27 @@
+{% for baby in data.res %}
+    <div class="pro">
+        {% if baby.coupon_click_url %}
+            <a href="{{ baby.coupon_share_url }}" target="_blank">
+        {% else %}
+            <a href="{{ baby.url }}" target="_blank">
+        {% endif %}
+            <div class="pro-img" style="background-image: url({{ baby.pict_url }})"></div>
+            <div class="pro-name">{{ baby.title }}</div>
+            <div class="pro-price">
+                <div class="pro-coupon-price">{{ baby.coupon_info }}券</div>
+                <div class="pro-old-price">¥{{ baby.zk_final_price }}</div>
+            </div>
+        </a>
+        {% if baby.coupon_click_url %}
+            <a href="{{ baby.coupon_share_url }}" target="_blank">
+                <div class="pro-coupon">
+                    <div class="coupon-info">
+                        <span class="coupon-info1">预计领取优惠券后</span>
+                        <span class="coupon-info2">¥{{ baby.current_price }}</span>
+                    </div>
+                    <div class="coupon-next"></div>
+                </div>
+            </a>
+        {% endif %}
+    </div>
+{% endfor %}
