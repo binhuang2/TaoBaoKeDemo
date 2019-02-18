@@ -1,7 +1,7 @@
 
 from m.shop_request import TbkRequest
 
-PAGE_SIZE = 12
+PAGE_SIZE = 10
 
 class api():
     @classmethod

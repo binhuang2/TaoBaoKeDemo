@@ -8,6 +8,7 @@
     <link href="/static/css/index.css" rel="stylesheet">
 </head>
 <body>
+<!--https://github.com/ximan/dropload-->
     <div class="search">
         <div class="search-bar">
             <form method="get" action="">
@@ -17,7 +18,7 @@
         </div>
     </div>
 
-    <div class="content">
+    <div class="content" id="pro-list">
         {% for baby in data.res %}
             <div class="pro">
             {% if baby.coupon_click_url %}
@@ -39,7 +40,7 @@
                 <a href="{{ baby.coupon_share_url }}" target="_blank">
                 <div class="pro-coupon">
                     <div class="coupon-info">
-                        <span class="coupon-info1">预计领取优惠券后</span>
+                        <span class="coupon-info1">领取优惠券后</span>
                         <span class="coupon-info2">¥{{ baby.current_price }}</span>
                     </div>
                     <div class="coupon-next"></div>
@@ -48,36 +49,68 @@
             {% endif %}
         </div>
         {% endfor %}
+        <div style="clear: both;"></div>
+    </div>
+
+    <div id="load-data" style="display: none;">
+        <ul>
+        <li id="load-animation"></li>
+        <li id="load-string">正在加载新数据</li>
+        </ul>
     </div>
 
     <script type="text/javascript">
         var isEnd = false;
         var isLoading = false;
         var page = 1;
+        var loading = document.getElementById('load-data');
+
         var getList = function () {
-            if (isEnd || isLoading) {
-                return;
-            }
+            if (isEnd || isLoading) return;
+            isLoading = true;
             page += 1;
             $.ajax({
                 type:'get',
-                url:'http://127.0.0.1:8000/page.php?page='+ page,
-                dataType:'json',
+                async:false,
+                url:'/page.php?page='+ page,
+                dataType:'html',
                 success:function (ret) {
-                    console.log(ret.data);
+                    var html = document.getElementById("pro-list").innerHTML;
+                    //再跟你想追加的代码加到一起插入div中
+                    document.getElementById("pro-list").innerHTML = html + ret;
+                    isLoading = false;
+                    loading.style.display = 'none';
+                    if (page === 10 || ret.length === 0) {
+                        isEnd = true;
+                        document.getElementById('load-animation').style.display = 'none';
+                        document.getElementById('load-string').innerHTML = '数据加载完毕';
+                    }
+                },
+                error:function (err) {
+                    isEnd = true;
+                    document.getElementById('load-animation').style.display = 'none';
+                    document.getElementById('load-string').innerHTML = '数据加载完毕';
                 }
             })
-        }
+        };
 
-        getList();
-
+        var screenHeight = window.screen.height;
+        window.onscroll = function () {
+            var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+            var scrollHeight = document.body.scrollHeight || document.documentElement.scrollHeight;
+            if (screenHeight + scrollTop >= scrollHeight) {
+                loading.style.display = 'block';
+                setTimeout(function () {
+                    getList();
+                },2000);
+            }
+        };
 
         function setRem(){
             var width = document.body.offsetWidth;
             var nowFont=width / 375. * 16.;
             var htmlFont=document.getElementsByTagName('html')[0];
             htmlFont.style.fontSize =nowFont+"px";
-            console.log(nowFont);
         }
         setRem();
         window.onresize=setRem;  //监听屏幕变化

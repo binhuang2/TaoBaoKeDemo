@@ -73,7 +73,8 @@ body {
 }
 
 .content {
-    margin-top: 90/@rem;
+    width: 100%;
+    margin: 90/@rem auto 0 auto;
     height: auto;
     .pro {
         width: calc(~"50% - 0.9375rem");
@@ -124,7 +125,6 @@ body {
             .coupon-info {
                 float: left;
                 width: calc(~"100% - 2.5rem");
-                height: 50/@rem;
                 .coupon-info1 {
                     margin: 2/@rem 5/@rem;
                     display: block;
@@ -147,5 +147,26 @@ body {
                 overflow: hidden;
             }
         }
+    }
+}
+
+
+#load-data {
+    width: 38%;
+    margin: auto;
+    overflow: hidden;
+    ul li{
+        height: 20/@rem;
+        float: left;
+        list-style: none;
+        margin-left: 5/@rem;
+    }
+    #load-animation {
+        width: 20/@rem;
+        background: url("/static/img/loading.gif") no-repeat;
+        background-size: 100%;
+    }
+    #load-string {
+        font-size: 0.95rem;
     }
 }

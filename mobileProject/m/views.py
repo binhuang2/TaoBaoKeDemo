@@ -18,4 +18,4 @@ def page(request):
     data = indexApi.api.index(request)
     if data is not False:
         return render(request, 'page.html', {'data':data})
-    return None
+    return HttpResponse('');
