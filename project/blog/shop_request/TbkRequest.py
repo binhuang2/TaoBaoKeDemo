@@ -29,7 +29,7 @@ class BaseRequest:
         '''发送请求'''
         header = self.__get_request_header()
         body = urllib.parse.urlencode(self.param)
-        print("%s?%s" % (self.http_url,body))
+        #print("%s?%s" % (self.http_url,body))
         connection = httplib.HTTPConnection('gw.api.taobao.com')
         connection.request(method='POST', url=self.http_url, headers=header, body=body)
         response = connection.getresponse()

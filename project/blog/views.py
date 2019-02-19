@@ -8,7 +8,7 @@ import math
 
 #定义一些常量
 #每页数据的数量
-PAGE_SIZE = 12
+PAGE_SIZE = 20
 
 #view code
 
@@ -16,6 +16,59 @@ def index(request):
     '''
     首页
     '''
+    cid = request.GET.get('cid')
+    if cid is None or len(cid) == 0:
+        cid = 9660
+    data = {
+        'cid' : int(cid),
+        'nav' : [
+            {
+                'cat_name':'综合',
+                'cat_id':9660
+            },
+            {
+                'cat_name': '女装',
+                'cat_id': 9658
+            },
+            {
+                'cat_name': '母婴',
+                'cat_id': 9650
+            },
+            {
+                'cat_name': '男装',
+                'cat_id': 9654
+            },
+            {
+                'cat_name': '美妆个护',
+                'cat_id': 3794
+            },
+            {
+                'cat_name': '潮流范',
+                'cat_id': 4093
+            },
+            {
+                'cat_name':'鞋包配饰',
+                'cat_id': 9648
+            },
+            {
+                'cat_name': '数码家电',
+                'cat_id': 9656
+            },
+            {
+                'cat_name': '家居家装',
+                'cat_id': 9655
+            },
+            {
+                'cat_name': '有好货',
+                'cat_id': 4092
+            },
+            {
+                'cat_name': '特惠',
+                'cat_id': 4094
+            }
+        ]
+    }
+
     page_no = request.GET.get('page')
 
     #页码
@@ -24,7 +77,7 @@ def index(request):
     param = {
         'method': 'taobao.tbk.dg.optimus.material',
         'adzone_id': '91132500175',
-        'material_id':9660,
+        'material_id':cid,
         'page_no': page_no,
         'page_size': PAGE_SIZE
     }
@@ -35,9 +88,10 @@ def index(request):
     map_data = res['result_list']['map_data']
     coupon = []
     not_coupon = []
+    print(map_data)
     for values in map_data:
         values['pict_url'] = values['pict_url'].replace('\\', '')
-        if len(values['coupon_click_url']) > 0:
+        if 'coupon_click_url' in values:
             values['coupon_share_url'] = values['coupon_click_url'].replace('\\', '')
             current_price = values['coupon_amount']
             values['coupon_info'] = '%s元' % current_price
@@ -48,10 +102,10 @@ def index(request):
     res = []
     res.extend(coupon)
     res.extend(not_coupon)
-    data = {
-        'res':res
-    }
-    page_count = math.ceil(100 / PAGE_SIZE)
+
+    data['res'] = res
+
+    page_count = math.ceil(200 / PAGE_SIZE)
     page_object = JXPlugs.page(page_count)
     page_list = page_object.comput(int(page_no))
     data['page'] = {
