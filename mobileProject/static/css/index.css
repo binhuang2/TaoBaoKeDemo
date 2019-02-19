@@ -147,7 +147,7 @@ body {
 }
 #load-data {
   width: 38%;
-  margin: auto;
+  margin: 0.625rem auto 0.625rem auto;
   overflow: hidden;
 }
 #load-data ul li {

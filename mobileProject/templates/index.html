@@ -11,8 +11,8 @@
 <!--https://github.com/ximan/dropload-->
     <div class="search">
         <div class="search-bar">
-            <form method="get" action="">
-                <input type="text" placeholder="请输入商品名称"/>
+            <form method="get" action="search.html" id="HSearch" onsubmit="return search_check()">
+                <input type="text" name="q" placeholder="请输入商品名称"/>
                 <button type="submit">商品搜索</button>
             </form>
         </div>
@@ -65,10 +65,21 @@
         var page = 1;
         var loading = document.getElementById('load-data');
 
+        function search_check() {
+            var formObject = document.getElementById('HSearch');
+            var inputQ = formObject['q'];
+            if (inputQ.value.length === 0) {
+                alert('请输入商品名称');
+                return false;
+            }
+            return true;
+        }
+
         var getList = function () {
             if (isEnd || isLoading) return;
             isLoading = true;
             page += 1;
+            console.log('当前'+page);
             $.ajax({
                 type:'get',
                 async:false,
@@ -94,17 +105,12 @@
             })
         };
 
-        var screenHeight = window.screen.height;
-        window.onscroll = function () {
-            var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-            var scrollHeight = document.body.scrollHeight || document.documentElement.scrollHeight;
-            if (screenHeight + scrollTop >= scrollHeight) {
-                loading.style.display = 'block';
-                setTimeout(function () {
-                    getList();
-                },2000);
-            }
-        };
+        $(window).bind('scroll',function () {
+            loading.style.display = 'block';
+            if($(window).scrollTop()+$(window).height() >= $(document).height()) {
+                getList();
+            }
+        });
 
         function setRem(){
             var width = document.body.offsetWidth;

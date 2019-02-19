@@ -1,96 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
+    <title>领取淘宝优惠券</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>{{ data.q }}_商品搜索_免费领淘宝购物券</title>
-    <link href="http://web.appclient.cn/static/css/base.css" rel="stylesheet">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link href="/static/css/index.css" rel="stylesheet">
 </head>
 <body>
-
-<div class="search-bar">
+<!--https://github.com/ximan/dropload-->
     <div class="search">
-        <form action="search.html" method="get" id="HSearch" onsubmit="return search_check()">
-            <div class="search_left">
-                {% if data %}
-                    <input type="text" name="q" value="{{ data.q }}" />
-                {% else %}
-                    <input type="text" name="q" placeholder="丝袜" />
-                {% endif %}
-            </div>
-            <div class="search_right">
+        <div class="search-bar">
+            <form method="get" action="search.html" id="HSearch" onsubmit="return search_check()">
+                <input type="text" name="q" placeholder="请输入商品名称" value="{{ data.q }}"/>
                 <button type="submit">商品搜索</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
-{% if data.res %}
-    <div class="search-content">
-    <div class="baby-father">
-        {% for baby in data.res %}
-            <div class="baby-item">
-            <div class="item-img">
-                {% if baby.coupon_id %}
-                    <a href="{{ baby.coupon_share_url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
-                {% else %}
-                    <a href="{{ baby.url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
-                {% endif %}
-            </div>
-            <div class="item-info item-money">
-                {% if baby.current_price %}
-                    <span class="nprice">现价<span class="font-20-bold">￥{{ baby.current_price }}</span></span>
-                    <span class="oprice">原价￥{{ baby.zk_final_price }}</span>
-                {% else %}
-                    <span class="nprice">现价<span class="font-20-bold">￥{{ baby.zk_final_price }}</span></span>
-                {% endif %}
-            </div>
-            <div class="item-info item-coupon">
-                {% if baby.coupon_id %}
-                    <a href="{{ baby.coupon_share_url }}" target="_blank">
-                        <span>领取{{ baby.coupon_info }}优惠券</span>
-                    </a>
-                {% endif %}
-             </div>
-            <div class="item-info item-pname">
-                {% if baby.coupon_id %}
-                    <a href="{{ baby.coupon_share_url }}" target="_blank">{{ baby.title }}</a>
-                {% else %}
-                    <a href="{{ baby.url }}" target="_blank">{{ baby.title }}</a>
-                {% endif %}
-            </div>
+
+    <div class="content" id="pro-list">
+          {% for baby in data.res %}
+            <div class="pro">
+            {% if baby.coupon_click_url %}
+                <a href="{{ baby.coupon_share_url }}" target="_blank">
+            {% else %}
+                <a href="{{ baby.url }}" target="_blank">
+            {% endif %}
+                <div class="pro-img" style="background-image: url({{ baby.pict_url }})">
+                </div>
+                <div class="pro-name">
+                    {{ baby.title }}
+                </div>
+                <div class="pro-price">
+                    <div class="pro-coupon-price">{{ baby.coupon_info }}券</div>
+                    <div class="pro-old-price">¥{{ baby.zk_final_price }}</div>
+                </div>
+            </a>
+            {% if baby.coupon_share_url %}
+                <a href="{{ baby.coupon_share_url }}" target="_blank">
+                <div class="pro-coupon">
+                    <div class="coupon-info">
+                        <span class="coupon-info1">领取优惠券后</span>
+                        <span class="coupon-info2">¥{{ baby.current_price }}</span>
+                    </div>
+                    <div class="coupon-next"></div>
+                </div>
+                </a>
+            {% endif %}
         </div>
         {% endfor %}
+        <div style="clear: both;"></div>
     </div>
-</div>
-{% endif %}
-<!--分页-->
-<div class="page-content">
-    <ul>
-    {% if data.page.p > 1 %}
-        <a href="?q={{ data.q }}&page={{ data.page.previous }}"><li>上一页</li></a>
-    {% endif %}
-    {% for index in data.page.list %}
-        {% if index == data.page.p %}
-            <li class="high">{{ index }}</li>
-        {% else %}
-            <a href="?q={{ data.q }}&page={{ index }}"><li>{{ index }}</li></a>
-        {% endif %}
-    {% endfor %}
-    {% if data.page.p < data.page.count %}
-        <a href="?q={{ data.q }}&page={{ data.page.next }}"><li>下一页</li></a>
-    {% endif %}
-    </ul>
-</div>
-<script type="text/javascript">
-    function search_check() {
-        var formObject = document.getElementById('HSearch');
-        var inputQ = formObject['q'];
-        if (inputQ.value.length === 0) {
-            inputQ.value = inputQ.placeholder;
+
+    <div id="load-data" style="display: none;">
+        <ul>
+        <li id="load-animation"></li>
+        <li id="load-string">正在加载新数据</li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+        var isEnd = false;
+        var isLoading = false;
+        var page = 1;
+        var loading = document.getElementById('load-data');
+
+        function search_check() {
+            var formObject = document.getElementById('HSearch');
+            var inputQ = formObject['q'];
+            if (inputQ.value.length === 0) {
+                alert('请输入商品名称');
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
-</script>
+
+        var getList = function () {
+            if (isEnd || isLoading) return;
+            isLoading = true;
+            page += 1;
+            console.log('当前'+page);
+            $.ajax({
+                type:'get',
+                async:false,
+                url:'/page.php?page='+ page,
+                dataType:'html',
+                success:function (ret) {
+                    var html = document.getElementById("pro-list").innerHTML;
+                    //再跟你想追加的代码加到一起插入div中
+                    document.getElementById("pro-list").innerHTML = html + ret;
+                    isLoading = false;
+                    loading.style.display = 'none';
+                    if (page === 10 || ret.length === 0) {
+                        isEnd = true;
+                        document.getElementById('load-animation').style.display = 'none';
+                        document.getElementById('load-string').innerHTML = '数据加载完毕';
+                    }
+                },
+                error:function (err) {
+                    isEnd = true;
+                    document.getElementById('load-animation').style.display = 'none';
+                    document.getElementById('load-string').innerHTML = '数据加载完毕';
+                }
+            })
+        };
+/*
+        $(window).bind('scroll',function () {
+            loading.style.display = 'block';
+            if($(window).scrollTop()+$(window).height() >= $(document).height()) {
+                getList();
+            }
+        });
+*/
+        function setRem(){
+            var width = document.body.offsetWidth;
+            var nowFont=width / 375. * 16.;
+            var htmlFont=document.getElementsByTagName('html')[0];
+            htmlFont.style.fontSize =nowFont+"px";
+        }
+        setRem();
+        window.onresize=setRem;  //监听屏幕变化
+    </script>
 </body>
 </html>

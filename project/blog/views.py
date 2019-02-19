@@ -78,7 +78,7 @@ def search(request):
         page_no = 1
 
     #搜索关键字
-    if product_name is None:
+    if product_name is None or len(product_name) == 0:
         product_name = '面包'
 
     param = {

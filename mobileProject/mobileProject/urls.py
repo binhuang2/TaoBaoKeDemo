@@ -21,5 +21,6 @@ urlpatterns = [
     #path('admin/', admin.site.urls),
     path('', views.index),
     path('index.html', views.index),
+    path('search.html', views.search),
     path('page.php', views.page)
 ]
