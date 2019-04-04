@@ -1,162 +1,35 @@
-@charset "utf-8";
-* { margin:0;padding:0;}
-body { font: 15px "Microsoft YaHei", Arial, Helvetica, sans-serif; color: #000; background: #FFF; line-height: 1.5;}
-img { border: 0; display: block; }
-ul, li { list-style: none; }
-a { text-decoration: none; color: #333; }
-a:hover { color: #000; text-decoration: none; }
-input {border:none; outline:none; background:none;}
-input:focus {background-color: #FFF; outline: none;}
-button {
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border: none;
-    outline:none;
-    cursor: pointer;
-}
-button:focus {
-    outline: none;
-}
-.font-20-bold {
-    font-size: 20px;
-    font-weight:bold;
-}
-.search-bar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 84px;
-    background-color: #fff;
-    border-bottom: 1px #ECECEC solid;
-    -moz-box-shadow:0 0 2px #e1e1e1; -webkit-box-shadow:0 0 2px #e1e1e1; box-shadow:0 0 2px #e1e1e1;
-}
-.search-bar .search {
-    width: 960px;
-    margin: 20px auto;
-    border: 2px solid #fb4806;
-    height: 44px;
-}
-.search-bar .search .search_left {
-    width: 840px;
-    height: 46px;
-    float: left;
-}
-.search-bar .search .search_right {
-    width: 120px;
-    height: 46px;
-    float: left;
-}
-.search-bar .search .search_left input {
-    width: 98%;
-    height: 44px;
-    padding: 0 5px 0 5px;
-    font-size: 15px;
-}
-.search-bar .search .search_right button {
-    width: 100%;
-    height: 46px;
-    color: #FFF;
-    font-size: 15px;
-    background-color: #fb4806;
-}
-.search-content {
-    width: 964px;
-    margin: 134px auto 0 auto;
-    background-color: #fff;
-}
-.search-content .baby-father {
-    width: 985px;
-    margin-left: -10px;
-    overflow: hidden;
-}
-.search-content .baby-father .baby-item {
-    width: 224px;
-    height: 345px;
-    float: left;
-    margin: 10px;
-    border: #ECECEC 1px solid;
-}
-.search-content .baby-father .baby-item:hover {
-    border: #fb4806 1px solid;
-}
-.baby-item .item-info {
-    width: 100%;
-    height: 44px;
-    float: left;
-}
-.baby-item .item-img img{
-    max-width: 224px;
-    max-height: 224px;
-    float: left;
-}
-.baby-item .item-money {
-    height: 31px;
-    width: 214px;
-    line-height: 30px;
-    margin: 5px 5px 0 5px;
-}
-.baby-item .item-money .nprice {
-    color: #fb4806;
-    height: 100%;
-    font-size: 14px;
-    float: left;
-}
-.baby-item .item-money .oprice {
-    height: 100%;
-    color: #4e4e4e;
-    text-decoration: line-through;
-    font-size: 14px;
-    text-align: right;
-    float: right;
-}
-.baby-item .item-coupon {
-    height: 30px;
-    line-height: 30px;
-    width: 214px;
-    margin: 0 5px 0 5px;
-    font-size: 14px;
-    font-weight: bolder;
-    text-decoration: underline;
-}
-.baby-item .item-coupon a {
-    color: red;
-}
-.baby-item .item-pname {
-    font-size: 13px;
-    color: #393939;
-    width: 214px;
-    height: 40px;
-    margin: 5px 5px 5px 5px;
-    overflow: hidden;
-}
-.baby-item .item-pname a:hover {
-    color: #fb4806;
-    text-decoration: underline;
-}
-.page-content {
-    width: 960px;
-    height: 44px;
-    margin: 50px auto 50px auto;
-    text-align: center;
-}
-.page-content ul {
-    display:inline-block;
-}
-.page-content ul li {
-    float: left;
-    padding: 5px 15px 5px 15px;
-    border: 1px solid #ECECEC;
-    margin: 0 0 -1px -1px;
-    position: relative;
-    z-index: 0;
-}
-.page-content ul a li:hover {
-    color: #fb4806;
-    border: 1px solid #fb4806;
-    z-index: 1;
-}
-.page-content ul .high {
-    background-color: #fb4806;
-    color: #FFF;
-}
+@charset "utf-8";*{margin:0;padding:0}
+body{font:15px "Microsoft YaHei",Arial,Helvetica,sans-serif;color:#000;background:#FFF;line-height:1.5}
+img{border:0;display:block}
+li,ul{list-style:none}
+a{text-decoration:none;color:#333}
+a:hover{color:#000;text-decoration:none}
+input{border:none;outline:0;background:0 0}
+input:focus{background-color:#FFF;outline:0}
+button{text-align:center;text-decoration:none;display:inline-block;border:none;outline:0;cursor:pointer}
+button:focus{outline:0}
+.font-20-bold{font-size:20px;font-weight:700}
+.search-bar{width:100%;background-color:#ffffff;}
+.search-bar .search{width:960px;margin:20px auto;border:2px solid #fb4806;height:44px}
+.search-bar .search .search_left{width:840px;height:44px;float:left}
+.search-bar .search .search_right{width:120px;height:44px;float:left}
+.search-bar .search .search_left input{width:98%;height:44px;padding:0 5px 0 5px;font-size:15px;}
+.search-bar .search .search_right button{width:100%;height:44px;color:#FFF;font-size:15px;background-color:#fb4806}
+.search-content{width:964px;margin:20px auto 0 auto;background-color:#fff}
+.search-content .baby-father{width:985px;margin-left:-10px;overflow:hidden}
+.search-content .baby-father .baby-item{width:224px;height:345px;float:left;margin:10px;border:#ECECEC 1px solid}
+.search-content .baby-father .baby-item:hover{border:#fb4806 1px solid}
+.baby-item .item-info{width:100%;height:44px;float:left}
+.baby-item .item-img img{max-width:224px;max-height:224px;float:left}
+.baby-item .item-money{height:31px;width:214px;line-height:30px;margin:5px 5px 0 5px}
+.baby-item .item-money .nprice{color:#fb4806;height:100%;font-size:14px;float:left}
+.baby-item .item-money .oprice{height:100%;color:#4e4e4e;text-decoration:line-through;font-size:14px;text-align:right;float:right}
+.baby-item .item-coupon{height:30px;line-height:30px;width:214px;margin:0 5px 0 5px;font-size:14px;font-weight:bolder;text-decoration:underline}
+.baby-item .item-coupon a{color:red}
+.baby-item .item-pname{font-size:13px;color:#393939;width:214px;height:40px;margin:5px 5px 5px 5px;overflow:hidden}
+.baby-item .item-pname a:hover{color:#fb4806;text-decoration:underline}
+.page-content{width:960px;height:44px;margin:50px auto 50px auto;text-align:center}
+.page-content ul{display:inline-block}
+.page-content ul li{float:left;padding:5px 15px 5px 15px;border:1px solid #ECECEC;margin:0 0 -1px -1px;position:relative;z-index:0}
+.page-content ul a li:hover{color:#fb4806;border:1px solid #fb4806;z-index:1}
+.page-content ul .high{background-color:#fb4806;color:#FFF}

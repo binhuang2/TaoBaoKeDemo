@@ -6,3 +6,4 @@ __pycache__/
 project/.idea/vcs.xml
 *.xml
 project/.idea/vcs.xml
+*.log

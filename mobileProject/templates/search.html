@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <title>{{ data.q }}_商品搜索_领取淘宝优惠券</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link href="/static/css/index.css" rel="stylesheet">
+</head>
+<body>
+<!--https://github.com/ximan/dropload-->
+    <div class="search">
+        <div class="search-bar">
+            <form method="get" action="search.html" id="HSearch" onsubmit="return search_check()">
+                <input type="text" name="q" placeholder="请输入商品名称" value="{{ data.q }}"/>
+                <button type="submit">商品搜索</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="content" id="pro-list">
+          {% for baby in data.res %}
+            <div class="pro">
+            {% if baby.coupon_click_url %}
+                <a href="{{ baby.coupon_share_url }}" target="_blank">
+            {% else %}
+                <a href="{{ baby.url }}" target="_blank">
+            {% endif %}
+                <div class="pro-img" style="background-image: url({{ baby.pict_url }})">
+                </div>
+                <div class="pro-name">
+                    {{ baby.title }}
+                </div>
+                <div class="pro-price">
+                    <div class="pro-coupon-price">{{ baby.coupon_info }}券</div>
+                    <div class="pro-old-price">¥{{ baby.zk_final_price }}</div>
+                </div>
+            </a>
+            {% if baby.coupon_share_url %}
+                <a href="{{ baby.coupon_share_url }}" target="_blank">
+                <div class="pro-coupon">
+                    <div class="coupon-info">
+                        <span class="coupon-info1">领取优惠券后</span>
+                        <span class="coupon-info2">¥{{ baby.current_price }}</span>
+                    </div>
+                    <div class="coupon-next"></div>
+                </div>
+                </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div style="clear: both;"></div>
+    </div>
+
+    <div id="load-data" style="display: none;">
+        <ul>
+        <li id="load-animation"></li>
+        <li id="load-string">正在加载新数据</li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+        var isEnd = false;
+        var isLoading = false;
+        var page = 1;
+        var loading = document.getElementById('load-data');
+
+        function search_check() {
+            var formObject = document.getElementById('HSearch');
+            var inputQ = formObject['q'];
+            if (inputQ.value.length === 0) {
+                alert('请输入商品名称');
+                return false;
+            }
+            return true;
+        }
+
+        var getList = function () {
+            if (isEnd || isLoading) return;
+            isLoading = true;
+            page += 1;
+            console.log('当前'+page);
+            $.ajax({
+                type:'get',
+                async:false,
+                url:'/page.php?page='+ page,
+                dataType:'html',
+                success:function (ret) {
+                    var html = document.getElementById("pro-list").innerHTML;
+                    //再跟你想追加的代码加到一起插入div中
+                    document.getElementById("pro-list").innerHTML = html + ret;
+                    isLoading = false;
+                    loading.style.display = 'none';
+                    if (page === 10 || ret.length === 0) {
+                        isEnd = true;
+                        document.getElementById('load-animation').style.display = 'none';
+                        document.getElementById('load-string').innerHTML = '数据加载完毕';
+                    }
+                },
+                error:function (err) {
+                    isEnd = true;
+                    document.getElementById('load-animation').style.display = 'none';
+                    document.getElementById('load-string').innerHTML = '数据加载完毕';
+                }
+            })
+        };
+/*
+        $(window).bind('scroll',function () {
+            loading.style.display = 'block';
+            if($(window).scrollTop()+$(window).height() >= $(document).height()) {
+                getList();
+            }
+        });
+*/
+        function setRem(){
+            var width = document.body.offsetWidth;
+            var nowFont=width / 375. * 16.;
+            var htmlFont=document.getElementsByTagName('html')[0];
+            htmlFont.style.fontSize =nowFont+"px";
+        }
+        setRem();
+        window.onresize=setRem;  //监听屏幕变化
+    </script>
+</body>
+</html>

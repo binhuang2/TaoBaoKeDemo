@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>免费领淘宝购物券</title>
-    <link href="/static/css/base.css" rel="stylesheet">
+    <title>领取淘宝优惠券</title>
+    <link href="/static/css/base.css?v=1.1" rel="stylesheet">
+    <link href="/static/css/nav.css?v=1.1" rel="stylesheet">
 </head>
 <body>
 <div class="search-bar">
@@ -20,13 +21,29 @@
     </div>
 </div>
 
+<div class="nav">
+    <ul>
+        {% for item in data.nav %}
+            <a href="?page=1&cid={{ item.cat_id }}">
+                {% if data.cid == item.cat_id %}
+                    <li class="height">
+                {% else %}
+                    <li>
+                {% endif %}
+                    {{ item.cat_name }}
+                </li>
+            </a>
+        {% endfor %}
+    </ul>
+</div>
+
 {% if data.res %}
     <div class="search-content">
     <div class="baby-father">
         {% for baby in data.res %}
             <div class="baby-item">
             <div class="item-img">
-                {% if baby.coupon_click_url %}
+                {% if baby.coupon_share_url %}
                     <a href="{{ baby.coupon_share_url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
                 {% else %}
                     <a href="{{ baby.url }}" target="_blank"><img src="{{ baby.pict_url }}" /></a>
@@ -41,14 +58,14 @@
                 {% endif %}
             </div>
             <div class="item-info item-coupon">
-                {% if baby.coupon_click_url %}
+                {% if baby.coupon_share_url %}
                     <a href="{{ baby.coupon_share_url }}" target="_blank">
                         <span>领取{{ baby.coupon_info }}优惠券</span>
                     </a>
                 {% endif %}
              </div>
             <div class="item-info item-pname">
-                {% if baby.coupon_click_url %}
+                {% if baby.coupon_share_url %}
                     <a href="{{ baby.coupon_share_url }}" target="_blank">{{ baby.title }}</a>
                 {% else %}
                     <a href="{{ baby.url }}" target="_blank">{{ baby.title }}</a>
@@ -56,6 +73,7 @@
             </div>
         </div>
         {% endfor %}
+        <div style="clear: both;"></div>
     </div>
 </div>
 {% endif %}
@@ -63,21 +81,20 @@
 <div class="page-content">
     <ul>
     {% if data.page.p > 1 %}
-        <a href="?page={{ data.page.previous }}"><li>上一页</li></a>
+        <a href="?page={{ data.page.previous }}&cid={{ data.cid }}"><li>上一页</li></a>
     {% endif %}
     {% for index in data.page.list %}
         {% if index == data.page.p %}
             <li class="high">{{ index }}</li>
         {% else %}
-            <a href="?page={{ index }}"><li>{{ index }}</li></a>
+            <a href="?page={{ index }}&cid={{ data.cid }}"><li>{{ index }}</li></a>
         {% endif %}
     {% endfor %}
     {% if data.page.p < data.page.count %}
-        <a href="?page={{ data.page.next }}"><li>下一页</li></a>
+        <a href="?page={{ data.page.next }}&cid={{ data.cid }}"><li>下一页</li></a>
     {% endif %}
     </ul>
 </div>
-
 <script type="text/javascript">
     function search_check() {
         var formObject = document.getElementById('HSearch');
