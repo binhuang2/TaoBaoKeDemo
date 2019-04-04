@@ -5,8 +5,9 @@ import hashlib
 
 class BaseRequest:
     http_url = 'http://gw.api.taobao.com/router/rest'
-    app_key = '25589807'
-    app_secret = 'bada8ec85bab3974cabee4eb3fd0c2ee'
+    #请填写自己的AppKey和AppSecret
+    app_key = ''
+    app_secret = ''
     param = {}
 
     def __init__(self, param):
